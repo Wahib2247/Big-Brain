@@ -1,28 +1,114 @@
 "use client";
-
+// TODO: may use localstorae to see whether email entered is valid.
+import { useState, useEffect } from 'react';
 import { Boxes } from '../ui/background-boxes';
 import { Button } from '../ui/button';
-// import { cn } from '@/lib/utils'
 
 function Connect() {
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        message: '',
+    });
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [lastSubmitted, setLastSubmitted] = useState(null); // Track last submission time
+    const [cooldownTime, setCooldownTime] = useState(0); // Cooldown timer in seconds
+    const cooldownPeriod = 30 * 1000; // 30 seconds cooldown period
+
+    useEffect(() => {
+        if (lastSubmitted) {
+            const interval = setInterval(() => {
+                const elapsed = Date.now() - lastSubmitted;
+                const remaining = Math.max(0, Math.ceil((cooldownPeriod - elapsed) / 1000));
+                setCooldownTime(remaining);
+
+                if (remaining === 0) {
+                    clearInterval(interval);
+                }
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+    }, [lastSubmitted]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setSuccess('');
+
+        if (loading) {
+            setError('Please wait before submitting again.');
+            return;
+        }
+
+        const now = Date.now();
+        if (lastSubmitted && (now - lastSubmitted < cooldownPeriod)) {
+            setError(`You must wait ${cooldownTime} seconds before submitting again.`);
+            return;
+        }
+
+        // Validate form data
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.message) {
+            setError('All fields are required.');
+            return;
+        }
+
+        // Check email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            setError('Invalid email format.');
+            return;
+        }
+
+        setLoading(true); // Set loading to true when submission starts
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setSuccess('Form submitted successfully.');
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    message: '',
+                });
+                setLastSubmitted(now); // Update last submission time
+            } else {
+                setError(data.error || 'Failed to submit the form. Please try again.');
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+            setError('Failed to submit the form. Please try again later.');
+        } finally {
+            setLoading(false); // Reset loading state in finally block
+        }
+    };
+
     return (
         <>
-            {/* <div className="h-screen relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
-                <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
-                <Boxes />
-                <h1 className={cn("md:text-4xl text-xl text-white relative z-20")}>
-                    Tailwind is Awesome
-                </h1>
-                <p className="text-center mt-2 text-neutral-300 relative z-20">
-                    Framer motion is the best animation library ngl
-                </p>
-            </div> */}
             <div className="h-screen overflow-hidden relative w-full isolate bg-slate-900 px-6 py-24 sm:py-32 lg:px-8">
-                <Boxes className={'-z-50'}/>
+                <Boxes className={'-z-50'} />
                 <div className="mx-auto max-w-2xl text-center">
                     <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Contact Us</h2>
                 </div>
-                <form action="#" method="POST" className="mx-auto mt-8 max-w-xl">
+                <form onSubmit={handleSubmit} className="mx-auto mt-8 max-w-xl">
                     <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                         <div>
                             <label htmlFor="first-name" className="block text-sm font-semibold leading-6 text-gray-100">
@@ -31,10 +117,12 @@ function Connect() {
                             <div className="mt-2.5">
                                 <input
                                     id="first-name"
-                                    name="first-name"
+                                    name="firstName"
                                     type="text"
                                     autoComplete="given-name"
-                                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    value={formData.firstName}
+                                    onChange={handleChange}
+                                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 outline-none sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -45,10 +133,12 @@ function Connect() {
                             <div className="mt-2.5">
                                 <input
                                     id="last-name"
-                                    name="last-name"
+                                    name="lastName"
                                     type="text"
                                     autoComplete="family-name"
-                                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                    className="block w-full outline-none rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -62,7 +152,9 @@ function Connect() {
                                     name="email"
                                     type="email"
                                     autoComplete="email"
-                                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="block outline-none w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -75,24 +167,38 @@ function Connect() {
                                     id="message"
                                     name="message"
                                     rows={4}
-                                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    defaultValue={''}
+                                    value={formData.message}
+                                    onChange={handleChange}
+                                    className="block outline-none w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
                     </div>
+                    {error && (
+                        <div className="mt-4 text-red-600">
+                            {error}
+                        </div>
+                    )}
+                    {success && (
+                        <div className="mt-4 text-green-400">
+                            {success}
+                        </div>
+                    )}
                     <div className="mt-10">
-                        <button
-                            type="submit"
-                            className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                            Lets talk
-                        </button>
+                        <Button asChild>
+                            <button
+                                type="submit"
+                                disabled={loading || (lastSubmitted && cooldownTime > 0)}
+                                className={`w-full ${loading || cooldownTime > 0 ? 'bg-gray-500' : 'bg-gray-100 hover:bg-gray-300'}`}
+                            >
+                                {loading ? 'Submitting...' : (lastSubmitted && cooldownTime > 0 ? `${cooldownTime}s` : `Let's talk`)}
+                            </button>
+                        </Button>
                     </div>
                 </form>
             </div>
         </>
-    )
+    );
 }
 
-export default Connect
+export default Connect;

@@ -1,4 +1,6 @@
 import { CheckIcon } from "@radix-ui/react-icons"
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 function Premium() {
     const fts = [
@@ -37,8 +39,7 @@ function Premium() {
                         <div className="p-8 sm:p-10 lg:flex-auto">
                             <h3 className="text-2xl font-bold tracking-tight text-gray-100">Lifetime membership</h3>
                             <p className="mt-6 text-base leading-7 text-gray-100">
-                                Lorem ipsum dolor sit amet consect etur adipisicing elit. Itaque amet indis perferendis blanditiis
-                                repellendus etur quidem assumenda.
+                                Experience our Pro version with prioritized support and unlimited questions. Upload up to 5MB of data and filter out irrelevant answers for efficient interactions.
                             </p>
                             <div className="mt-10 flex items-center gap-x-4">
                                 <h4 className="flex-none text-sm font-semibold leading-6 text-indigo-100">What’s included</h4>
@@ -57,19 +58,14 @@ function Premium() {
                             </ul>
                         </div>
                         <div className="mt-10 p-2 lg:mt-0 lg:w-full lg:max-w-md lg:flex-shrink-0">
-                            <div className="rounded-2xl bg-black/10 py-10 text-center ring-1 ring-inset ring-gray-700 lg:flex lg:flex-col lg:justify-center lg:py-16">
+                            <div className="rounded-2xl bg-black/10 py-10 text-center ring-1 ring-inset ring-gray-7 00 lg:flex lg:flex-col lg:justify-center lg:py-16">
                                 <div className="mx-auto max-w-xs px-8">
                                     <p className="text-base font-semibold text-gray-300">Pay once, own it forever</p>
                                     <p className="mt-6 flex items-baseline justify-center gap-x-2">
                                         <span className="text-5xl font-bold tracking-tight text-gray-100">$34.9</span>
                                         <span className="text-sm font-semibold leading-6 tracking-wide text-gray-300">USD</span>
                                     </p>
-                                    <a
-                                        href="#"
-                                        className="mt-10 block w-full rounded-md bg-indigo-500 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                                    >
-                                        Get access
-                                    </a>
+                                    <Button asChild className="mt-10 w-full"><Link href={'/'}>Get Access</Link></Button>
                                     <p className="mt-6 text-xs leading-5 text-gray-300">
                                         Invoices and receipts available for easy company reimbursement
                                     </p>
