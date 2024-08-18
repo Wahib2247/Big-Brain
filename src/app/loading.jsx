@@ -1,14 +1,5 @@
-import "@/styling/loader.css"
-function loading() {
-  return (
-    <>
-      <div class="typewriter top-1/2">
-        <div class="slide"><i></i></div>
-        <div class="paper"></div>
-        <div class="keyboard"></div>
-      </div>
-    </>
-  )
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+export default function loading() {
+  const words = `L o a d i n g . . .`;
+  return <TextGenerateEffect words={words}/>;
 }
-
-export default loading

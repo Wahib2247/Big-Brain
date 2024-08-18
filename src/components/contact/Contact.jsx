@@ -1,5 +1,5 @@
 "use client";
-// TODO: may use localstorae to see whether email entered is valid.
+// TODO: may use localstorage to see whether email entered is valid.
 import { useState, useEffect } from 'react';
 import { Boxes } from '../ui/background-boxes';
 import { Button } from '../ui/button';
