@@ -13,7 +13,7 @@ export function AuthTemplate({ title, submit }) {
         console.log("Form submitted");
     };
     return (
-        <div className="max-w-md w-full absolute top-32 left-1/2 -translate-x-[50%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
+        <div className="text-white max-w-md w-full absolute top-32 left-1/2 -translate-x-[50%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black/50 backdrop-blur-2xl">
             <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
                 Welcome {title == 'login' ? 'Back' : null} to Big Brain 🧠!
             </h2>

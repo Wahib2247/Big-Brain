@@ -1,9 +1,12 @@
 import React from 'react'
 import { AuthTemplate } from '@/components/auth/AuthTemplate'
+import { AuroraBackground } from '@/components/ui/aurora-background'
 
 function SignUp() {
     return (
-    <AuthTemplate title="signup" submit="handleSignup" />
+        <AuroraBackground>
+            <AuthTemplate title="signup" submit="handleSignup" />
+        </AuroraBackground>
     )
 }
 
