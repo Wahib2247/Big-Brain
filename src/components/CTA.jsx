@@ -18,7 +18,7 @@ export function CTA() {
                     Get started with Big Brain 🧠 and join the Big Brain community today and gain access to tools, insights, and resources that will supercharge your intellect.
                 </p>
                 <div className="flex gap-3">
-                <Button>Get Started</Button>
+                <Button asChild><Link href={'/signup'}>Get Started</Link></Button>
                 <Button variant="outline"><Link href={'#top'}>Back To Top</Link></Button>
                 </div>
             </div>

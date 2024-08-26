@@ -5,7 +5,7 @@ import { AuroraBackground } from '@/components/ui/aurora-background'
 function SignUp() {
     return (
         <AuroraBackground>
-            <AuthTemplate title="signup" submit="handleSignup" />
+            <AuthTemplate title="signup" />
         </AuroraBackground>
     )
 }

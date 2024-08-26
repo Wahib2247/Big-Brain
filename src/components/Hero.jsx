@@ -43,7 +43,9 @@ function Hero() {
                 </div>
                 <div className='flex justify-center items-center gap-3'>
                     <Button className='my-5'>
-                        Get Started
+                        <Link href={'/signup'}>
+                            Get Started
+                        </Link>
                     </Button>
                     <Button className='my-5' variant="outline">
                         <Link href={'#explore'}>

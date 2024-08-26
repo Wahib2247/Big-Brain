@@ -1,17 +1,21 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandGithub } from "@tabler/icons-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
-export function AuthTemplate({ title, submit }) {
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form submitted");
-    };
+export function AuthTemplate({ title }) {
+    const [loading, setLoading] = useState(false)
+
+    const handleLogin = async () => {
+    }
+    const handleSignUp = async () => {
+    }
+
     return (
         <div className="text-white max-w-md w-full absolute top-32 left-1/2 -translate-x-[50%] mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black/50 backdrop-blur-2xl">
             <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
@@ -35,7 +39,7 @@ export function AuthTemplate({ title, submit }) {
                 }
             </p>
 
-            <form className="my-8" onSubmit={submit}>
+            <form className="my-8" onSubmit={title == 'login' ? handleLogin : handleSignUp}>
                 <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
                     {title == 'signup' ?
                         <LabelInputContainer>
@@ -73,26 +77,32 @@ export function AuthTemplate({ title, submit }) {
                     }
                     <BottomGradient />
                 </Button>
-
-
-                {title == 'signup' ?
-                    <>
-                        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-                        <div className="flex flex-col space-y-4">
-                            <Button
-                                className="relative group/btn flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-                                type="submit"
-                            >
-                                <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-                                <span className="text-neutral-700 dark:text-neutral-300 text-sm">
-                                    Google
-                                </span>
-                                <BottomGradient />
-                            </Button>
-                        </div>
-                    </> : null
-                }
             </form>
+
+            <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+            
+            <div className="flex flex-col space-y-4">
+                <Button
+                    className="relative group/btn flex space-x-2 items-center justify-center px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+                    disabled={loading}
+                    asChild
+                >
+                    <button
+                        className="flex justify-center items-center gap-1"
+                        onClick={() => {
+                            setLoading(true);
+                            signIn("github")
+                        }
+                        }
+                    >
+                        <IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+                        <span className="text-neutral-700 dark:text-neutral-300 text-sm">
+                            {title == "login" ? 'Login with Github' : 'SignUp with Github'}
+                        </span>
+                        <BottomGradient />
+                    </button>
+                </Button>
+            </div>
         </div>
     );
 }

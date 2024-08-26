@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
-export const FloatingNav = ({ navItems, className }) => {
+export const FloatingNav = ({ navItems, className, out }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -66,10 +67,17 @@ export const FloatingNav = ({ navItems, className }) => {
           ))}
         </div>
 
-        <Link href={'/signup'} className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
-          <span>Get Started</span>
-          <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
-        </Link>
+        {out ?
+          <Link href={'/signup'} className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
+            <span>Get Started</span>
+            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+          </Link>
+          :
+          <Link href={'/'} className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
+            <button onClick={() => signOut()}>Log Out</button>
+            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-px" />
+          </Link>
+        }
 
         {/* Responsive menu for smaller screens */}
         <AnimatePresence>

@@ -5,7 +5,7 @@ import React from 'react'
 function Login() {
   return (
     <AuroraBackground>
-      <AuthTemplate title="login" submit="handleLogin" />
+      <AuthTemplate title="login" />
     </AuroraBackground>
   )
 }

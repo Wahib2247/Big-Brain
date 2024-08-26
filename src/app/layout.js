@@ -1,6 +1,6 @@
 import { Antonio } from "next/font/google";
 import "./globals.css";
-import Navbar from '../components/Navbar.jsx';
+import Sessionprovider from "@/helpers/sessionProvider";
 
 const ant = Antonio({ subsets: ["latin"] });
 
@@ -13,8 +13,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${ant.className} tracking-wide overflow-x-hidden dark`}>
-        <Navbar />
-        {children}
+        <Sessionprovider>
+          {children}
+        </Sessionprovider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import { FloatingNav } from "./ui/floating-navbar"
 
-function Navbar() {
+function Navbar({out}) {
 
     const navItems = [
         {
@@ -25,9 +25,24 @@ function Navbar() {
         },
     ];
 
+    const navItems2 = [
+        {
+            name: 'L',
+            link: '/login'
+        },
+        {
+            name: 'R',
+            link: '/register'
+        },
+        {
+            name: 'C',
+            link: '/cart'
+        }
+    ]
+
     return (
         <div className="relative w-full" id="top">
-            <FloatingNav navItems={navItems} />
+            <FloatingNav navItems={out ? navItems : navItems2 } out={out}/>
         </div>
     )
 }

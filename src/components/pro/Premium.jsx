@@ -64,7 +64,7 @@ function Premium() {
                                         <span className="text-5xl font-bold tracking-tight text-gray-100">$34.9</span>
                                         <span className="text-sm font-semibold leading-6 tracking-wide text-gray-300">USD</span>
                                     </p>
-                                    <Button asChild className="mt-10 w-full"><Link href={'/login'}>Get Access</Link></Button>
+                                    <Button asChild className="mt-10 w-full"><Link href={'/signup'}>Get Access</Link></Button>
                                     <p className="mt-6 text-xs leading-5 text-gray-300">
                                         Invoices and receipts available for easy company reimbursement
                                     </p>
