@@ -1,10 +1,13 @@
 "use client";
-// TODO: may use localstorage to see whether email entered is valid.
 import { useState, useEffect } from 'react';
 import { Boxes } from '../ui/background-boxes';
 import { Button } from '../ui/button';
+import Navbar from '../Navbar';
+import { useSession } from 'next-auth/react';
 
 function Connect() {
+    const { data: session } = useSession();
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -103,6 +106,8 @@ function Connect() {
 
     return (
         <>
+            <Navbar out={!session} />
+
             <div className="h-screen overflow-hidden relative w-full isolate bg-slate-900 px-6 py-24 sm:py-32 lg:px-8">
                 <Boxes className={'-z-50'} />
                 <div className="mx-auto max-w-2xl text-center">

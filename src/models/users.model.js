@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true,
         unique: true,
         match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address.']
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
     },
     password: {
         type: String,
@@ -20,7 +24,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    avatar: {
+    picture: {
         type: String,
         default: 'https://via.placeholder.com/150'
     },
@@ -47,19 +51,26 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// hash the password
+// Hash the password
 userSchema.pre('save', async function (next) {
     if (this.isModified('password') || this.isNew) {
-        const hashedPassword = await bcrypt.hash(this.password, 10);
-        this.password = hashedPassword;
+        try {
+            const hashedPassword = await bcrypt.hash(this.password, 10);
+            this.password = hashedPassword;
+        } catch (error) {
+            return next(error);
+        }
     }
     next();
 });
 
-//compare the password
+// Compare the password
 userSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-}
+    try {
+        return await bcrypt.compare(password, this.password);
+    } catch (error) {
+        throw new Error('Password comparison failed');
+    }
+};
 
-// export default mongoose.model('User', userSchema);
 export const User = mongoose.models.User || mongoose.model("User", userSchema);

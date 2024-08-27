@@ -35,8 +35,8 @@ function Navbar({out}) {
             link: '/register'
         },
         {
-            name: 'C',
-            link: '/cart'
+            name: 'Immense Brain 🌟',
+            link: '/pro'
         }
     ]
 

@@ -1,6 +1,9 @@
+"use client";
 import Link from "next/link";
 import { BackgroundBeams } from "../ui/background-beams";
 import { Button } from "../ui/button";
+import Navbar from "../Navbar";
+import { useSession } from "next-auth/react";
 
 const termsOfService = [
     {
@@ -60,8 +63,11 @@ const termsOfService = [
 ];
 
 function BgBeams() {
+    const {data: session} = useSession();
+
     return (
         <>
+        <Navbar out={!session}/>
             <div className="relative h-screen w-full rounded-md bg-neutral-950 flex flex-col items-center justify-center antialiased overflow-hidden">
                 <div className="custom-scrollbar overflow-y-auto max-w-2xl z-50 p-4 absolute top-28 bottom-5 mx-auto">
                     <h1 className="relative z-10 text-lg md:text-7xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600 text-center font-sans font-bold">

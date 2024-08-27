@@ -12,24 +12,22 @@ export default function Home() {
   if (status === "loading") {
     return <h1>Redirecting...</h1>;
   }
-
-  if (!session) {
-    return (
-      <>
-        <Navbar out={true} />
-        <Hero />
-        <Preface />
-        <CTA />
-      </>
-    );
-  }
-
   return (
     <>
-      <Navbar out={false} />
-      <h1>Welcome {session.token.name}!</h1>
-      <h1>Welcome {session.token.email}!</h1>
-      <h1>Welcome <Image alt="user-profile" src={session.token.picture} width={500} height={500}/>!</h1>
+      <Navbar out={!session} />
+      {!session ? (
+        <>
+          <Hero />
+          <Preface />
+          <CTA />
+        </>
+      ) : (
+        <div>
+          <h1>Welcome {session.token.name}!</h1>
+          <h1>{session.token.email}</h1>
+          <Image alt="user-profile" src={session.token.picture} width={500} height={500} />
+        </div>
+      )}
     </>
   );
 }
